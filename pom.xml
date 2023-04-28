@@ -17,6 +17,7 @@
     <packaging>jar</packaging>
     <jdk.version>17</jdk.version>
     <release.version>17</release.version>
+    <prefab.version>0.3.8pre4</prefab.version>
     <micronaut.version>3.9.0</micronaut.version>
     <micronaut.runtime>netty</micronaut.runtime>
     <exec.mainClass>com.example.Application</exec.mainClass>
@@ -30,6 +31,21 @@
   </repositories>
 
   <dependencies>
+    <dependency>
+      <groupId>cloud.prefab</groupId>
+      <artifactId>client</artifactId>
+      <version>${prefab.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cloud.prefab</groupId>
+      <artifactId>logback-listener</artifactId>
+      <version>${prefab.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cloud.prefab</groupId>
+      <artifactId>micronaut</artifactId>
+      <version>${prefab.version}</version>
+    </dependency>
     <dependency>
       <groupId>io.micronaut.reactor</groupId>
       <artifactId>micronaut-reactor</artifactId>
@@ -82,7 +98,6 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.micronaut</groupId>
