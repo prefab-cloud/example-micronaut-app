@@ -3,7 +3,6 @@ package com.example.config;
 import cloud.prefab.client.*;
 import cloud.prefab.client.config.logging.PrefabContextTurboFilter;
 import cloud.prefab.client.micronaut.ServerRequestContextStore;
-
 import io.micronaut.context.annotation.Context;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.env.Environment;
