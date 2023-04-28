@@ -2,6 +2,8 @@ package com.example.config;
 
 import cloud.prefab.client.*;
 import cloud.prefab.client.config.logging.PrefabContextTurboFilter;
+import cloud.prefab.client.micronaut.ServerRequestContextStore;
+
 import io.micronaut.context.annotation.Context;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.env.Environment;
@@ -18,6 +20,7 @@ public class PrefabFactory {
     final Options options = new Options();
     LOG.info("Prefab Envs {}", environment.getActiveNames().stream().toList());
     options.setPrefabEnvs(environment.getActiveNames().stream().toList());
+    options.setContextStore(new ServerRequestContextStore());
     return new PrefabCloudClient(options);
   }
 
