@@ -17,7 +17,7 @@
     <packaging>jar</packaging>
     <jdk.version>17</jdk.version>
     <release.version>17</release.version>
-    <prefab.version>0.3.8pre4</prefab.version>
+    <prefab.version>0.3.8pre6</prefab.version>
     <micronaut.version>3.9.0</micronaut.version>
     <micronaut.runtime>netty</micronaut.runtime>
     <exec.mainClass>com.example.Application</exec.mainClass>
