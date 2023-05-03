@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
-  <artifactId>demo</artifactId>
+  <artifactId>example-micronaut-app</artifactId>
   <version>0.1</version>
   <packaging>${packaging}</packaging>
 
@@ -30,6 +30,11 @@
   </repositories>
 
   <dependencies>
+    <dependency>
+      <groupId>io.micronaut.reactor</groupId>
+      <artifactId>micronaut-reactor</artifactId>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>io.micronaut</groupId>
       <artifactId>micronaut-inject</artifactId>
@@ -64,10 +69,6 @@
       <groupId>io.micronaut.security</groupId>
       <artifactId>micronaut-security-session</artifactId>
       <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.micronaut.views</groupId>
-      <artifactId>micronaut-views-velocity</artifactId>
     </dependency>
     <dependency>
       <groupId>io.micronaut.views</groupId>
