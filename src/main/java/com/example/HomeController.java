@@ -2,6 +2,8 @@ package com.example;
 
 import cloud.prefab.client.ConfigClient;
 import cloud.prefab.client.FeatureFlagClient;
+import cloud.prefab.context.PrefabContextHelper;
+import cloud.prefab.context.PrefabContextSetReadable;
 import com.example.auth.ExampleAuthenticationProvider;
 import com.example.auth.User;
 import io.micronaut.core.annotation.Nullable;
@@ -23,11 +25,14 @@ import java.util.stream.Collectors;
 @Controller
 public class HomeController {
     private static final Logger LOG = LoggerFactory.getLogger(HomeController.class);
+
     private final FeatureFlagClient featureFlagClient;
+    private final ConfigClient configClient;
 
     @Inject
-    HomeController(FeatureFlagClient featureFlagClient) {
+    HomeController(FeatureFlagClient featureFlagClient, ConfigClient configClient) {
         this.featureFlagClient = featureFlagClient;
+        this.configClient = configClient;
     }
 
     @Get
@@ -45,6 +50,10 @@ public class HomeController {
             templateData.put("currentUser", auth.getAttributes().get(ExampleAuthenticationProvider.USER_ATTR));
         }
         templateData.put("showGdprBanner", featureFlagClient.featureIsOn("gdpr.banner"));
+        // this block evaluates the configs with no pre-existing context so its the default values, unaffected by logged in user context
+        try (PrefabContextHelper.PrefabContextScope ignored = new PrefabContextHelper(configClient).performWorkWithAutoClosingContext(PrefabContextSetReadable.EMPTY)) {
+            templateData.put("allConfigs", configClient.getAll(PrefabContextSetReadable.EMPTY));
+        }
         return templateData;
     }
 }
