@@ -16,7 +16,7 @@
             <img src="/static/images/{{ toLowerCase currentUser.name }}.png" width="48px" class = "rounded-full" />
         </h1>
 
-
+        {{#if showGdprBanner }}
         <div class="border border-yellow-100 rounded p-4 flex gap-4 items-center justify-center bg-yellow-50">
             <p class="text-sm">
                 This website uses cookies to ensure you get the best experience our lawyers insist you have.
@@ -26,6 +26,7 @@
                 Accept
             </button>
         </div>
+        {{/if}}
 
         <p>Website content goes here.</p>
 
