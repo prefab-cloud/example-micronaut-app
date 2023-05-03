@@ -53,6 +53,36 @@
             {{/each}}
         </div>
     </div>
+
+    <div id="prefab-values" class="mt-24 space-y-4">
+        <p>Here's the resolved Prefab config for your application:</p>
+
+        <table class="border-separate w-full">
+            <thead class="bg-gray-50 text-left">
+            <th class="px-4">Key</th>
+            <th class="px-4">Default<span class="hidden md:inline"> Value</span></th>
+            <th class="px-4">
+                Evaluated
+                <span class="hidden md:inline">Value<abbr class="bg-blue-100 rounded-full p-1 no-underline cursor-help" title="The value as evaluated in the current context">?</abbr>
+                </span>
+            </th>
+            <th class="px-4">Type</th>
+            </thead>
+
+            <tbody>
+            {{# each allConfigs }}
+                <tr class="odd:bg-blue-50">
+                    <td class="p-4 break-all">{{ @key }}</td>
+                    <td class="p-4">{{ prefabCoerceToString this }}</td>
+                    <td class="p-4">{{ prefabEvaluateAndCoerceToString @key }}</td>
+                    <td class="p-4">{{ this.typeCase }}</td>
+                </tr>
+            {{/each }}
+            </tbody>
+        </table>
+    </div>
+
+
 </div>
 </main>
 </body>
