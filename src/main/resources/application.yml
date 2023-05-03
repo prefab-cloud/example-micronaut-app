@@ -1,6 +1,29 @@
 micronaut:
   application:
     name: demo
+  router:
+    static-resources:
+      default:
+        enabled: true
+        mapping: "/static/**"
+        paths:
+          - "classpath:public"
+  security:
+    enabled: true
+    interceptUrlMap:
+      - pattern: "/static/**/*"
+        httpMethod: GET
+        access:
+          - isAnonymous()
+    authentication: session
+    redirect:
+      login-success: /
+      login-failure: /login/authFailed
+    endpoints:
+      login:
+        enabled: true
+      logout:
+        enabled: true
 netty:
   default:
     allocator:
