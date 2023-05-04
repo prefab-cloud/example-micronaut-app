@@ -6,7 +6,7 @@ This repo shows how to add [Prefab] to your Rails app to get access to features 
 - Feature flags
 - Live config
 
-Follow along on YouTube
+Follow along on YouTube (coming soon)
 
 ## Micronaut Launch
 
@@ -119,7 +119,7 @@ Prefab lets you change log levels on the fly. We can even set log levels for spe
 
 Once your app has been running for about a minute it will have phoned-home stats about the logging output to prefil the log-level UI in prefab.
 
-## Configure Prefab Contexts for Targetted Log Levels
+## Configure Prefab Contexts for targeted Log Levels
 
 We can get even more specific about when to log by providing the Prefab client with more contextual information about what your app is doing for whom. Let's check it out.
 
@@ -147,6 +147,25 @@ Now imagine Jeff has reported a problem, so lets see how we can get more logs fo
 
 [Full diff](https://github.com/prefab-cloud/example-micronaut-app/compare/configure-prefab-context...add-feature-flag)
 
+Let's use the information we put in the context to disable the cookie banner for some users. Lets create a feature flag called "gdpr.banner" with a default value of true then use it in our application.
+
+After we inject `FeatureFlagClient` into the `HomeController` we can evaluate the flag and place the result into the template like this.
+
+```java
+templateData.put("showGdprBanner", featureFlagClient.featureIsOn("gdpr.banner"));
+```
+
+Note that we don't pass a context in, because we've already set a request-scoped property containing the user data.
+
+in the template we'll wrap the banner in a block like this 
+```
+{{#if showGdprBanner }}
+[the banner]
+{{/if}}
+```
+
+Restart the app and we can see the banner is still there. Now we'll update the feature flag's rules to evaluate to false for users with "country' equal to "US" . Logging in as Jeff and the banner is gone, logging in as someone else and the banner is back.
+
 
 ## All the Configs
 
@@ -154,7 +173,40 @@ Now imagine Jeff has reported a problem, so lets see how we can get more logs fo
 
 The final stop on our tour is to add a table showing all of the available configurations with the default, non-targetted values plus the value evaluated with the current user context.
 
+We'll be showing both the default, non-targeted values and the context-targetted values. ConfigClient's getAll method will return us a map of all keys and values but they'll be targetted values.
 
+To work around that we'll use a context helper to temporarily blank out the global context like this
+
+```java
+ try (PrefabContextHelper.PrefabContextScope ignored = new PrefabContextHelper(configClient).performWorkWithAutoClosingContext(PrefabContextSetReadable.EMPTY)) {
+            templateData.put("allConfigs", configClient.getAll(PrefabContextSetReadable.EMPTY));
+      }
+```
+
+We could call getAll again without the wrapper to get the targetted values, but instead we'll create a handlebars helper see [HandlebarsFactory](https://github.com/prefab-cloud/example-micronaut-app/blob/show-values-table/src/main/java/com/example/config/HandlebarsFactory.java) to evaluate a config key. It'll look like this
+
+```java
+ handlebars.registerHelper("prefabEvaluateAndCoerceToString",
+                (Helper<String>) (key, options) -> new Handlebars.SafeString(configClient.get(key).flatMap(ConfigValueUtils::coerceToString).orElse(""))
+        );
+```
+
+when we call that in the template, that'll evaluate using the request scoped context to get the context-targeted value. 
+
+The body of the table evaluates like this - the targeted value row passes the config key (the key of that map we set) to the helper like this `{{ prefabEvaluateAndCoerceToString @key }`
+
+```
+{{# each allConfigs }}
+    <tr class="odd:bg-blue-50">
+        <td class="p-4 break-all">{{ @key }}</td>
+        <td class="p-4">{{ prefabCoerceToString this }}</td>
+        <td class="p-4">{{ prefabEvaluateAndCoerceToString @key }}</td>
+        <td class="p-4">{{ this.typeCase }}</td>
+    </tr>
+{{/each }}
+```
+
+Now click around and observe that Jeff's columns for gdpr.banner differ between default and targeted value, while our other users do not.
 
 
 [Prefab]: https://prefab.cloud
