@@ -113,14 +113,34 @@ LOG.error("🚨 Hello error logger");
 
 The default log level in the [logback.xml](https://github.com/prefab-cloud/example-micronaut-app/blob/install-prefab/src/main/resources/logback.xml) file is INFO. When we visit http://localhost:8080 we should see the ERROR, WARN and INFO output but not the DEBUG.
 
-In the Prefab UI, let's set our "Root Log Level" to "INFO". Now reloading http://localhost:8080 shows the error, warn, and info output. Note how the output changes.
+In the Prefab UI, let's set our "Root Log Level" to "WARN". Now reloading http://localhost:8080 shows the ERROR, WARN output. Note how the output changes.
 
-Prefab lets you change log levels on the fly. We can even set log levels for specific for specific packages and classes by fully qualified class name.
+Prefab lets you change log levels on the fly. We can even set log levels for specific for specific packages and classes by fully qualified class name. 
 
-## Configure Prefab Contexts
+Once your app has been running for about a minute it will have phoned-home stats about the logging output to prefil the log-level UI in prefab.
 
+## Configure Prefab Contexts for Targetted Log Levels and Feature Flags
+
+We can get even more specific about when to log by providing the Prefab client with more contextual information about what your app is doing for whom. Let's check it out.
 
 [Full diff](https://github.com/prefab-cloud/example-micronaut-app/compare/install-prefab...configure-prefab-context)
+
+First we add one line to the PrefabFactory we previously set up `options.setContextStore(new ServerRequestContextStore());`. Our default ContextStore is based on thread locals, but that doesn't work for event-based systems like micronaut. The `ServerRequestContextStore` is stashed as an attribute in the HttpRequest, and we let Micronaut's thread instrumentation handle the thread local that backs `ServerRequestContext`
+
+Next we add a [filter](https://github.com/prefab-cloud/example-micronaut-app/blob/configure-prefab-context/src/main/java/com/example/prefab/PrefabContextFilter.java) to add a prefab context based on the currently "logged in' user.
+
+```java
+  configClient.getContextStore()
+        .addContext(PrefabContext.newBuilder("user")
+            .put("country", user.country())
+            .put("email", user.email())
+            .build()
+        );
+```
+
+Lets restart the app and try it out! 
+
+Now imagine Jeff has reported a problem, lets see how to get more logs for him First we can go back to the log configuration in Prefab add a targetted option for user id on the HomeController log levels
 
 
 ## All the Configs
