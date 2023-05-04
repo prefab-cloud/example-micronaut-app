@@ -119,7 +119,7 @@ Prefab lets you change log levels on the fly. We can even set log levels for spe
 
 Once your app has been running for about a minute it will have phoned-home stats about the logging output to prefil the log-level UI in prefab.
 
-## Configure Prefab Contexts for Targetted Log Levels and Feature Flags
+## Configure Prefab Contexts for Targetted Log Levels
 
 We can get even more specific about when to log by providing the Prefab client with more contextual information about what your app is doing for whom. Let's check it out.
 
@@ -132,6 +132,7 @@ Next we add a [filter](https://github.com/prefab-cloud/example-micronaut-app/blo
 ```java
   configClient.getContextStore()
         .addContext(PrefabContext.newBuilder("user")
+            .put("id", user.id())
             .put("country", user.country())
             .put("email", user.email())
             .build()
@@ -140,12 +141,18 @@ Next we add a [filter](https://github.com/prefab-cloud/example-micronaut-app/blo
 
 Lets restart the app and try it out! 
 
-Now imagine Jeff has reported a problem, lets see how to get more logs for him First we can go back to the log configuration in Prefab add a targetted option for user id on the HomeController log levels
+Now imagine Jeff has reported a problem, so lets see how we can get more logs for him. Let's go back to the log configuration in Prefab add a targetted option for user id on the HomeController log levels at debug for id=1, and set warn as the default. Reload the page as Jeff and we can see all the logs, but for anyone else the logs are much quieter.
+
+## Feature Flags
+
+[Full diff](https://github.com/prefab-cloud/example-micronaut-app/compare/configure-prefab-context...add-feature-flag)
 
 
 ## All the Configs
 
-[Full diff](https://github.com/prefab-cloud/example-micronaut-app/compare/configure-prefab-context...show-values-table)
+[Full diff](https://github.com/prefab-cloud/example-micronaut-app/compare/add-feature-flag...show-values-table)
+
+The final stop on our tour is to add a table showing all of the available configurations with the default, non-targetted values plus the value evaluated with the current user context.
 
 
 
