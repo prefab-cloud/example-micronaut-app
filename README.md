@@ -183,7 +183,7 @@ To work around that we'll use a context helper to temporarily blank out the glob
       }
 ```
 
-We could call getAll again without the wrapper to get the targetted values, but instead we'll create a handlebars helper see [HandlebarsFactory](https://github.com/prefab-cloud/example-micronaut-app/blob/show-values-table/src/main/java/com/example/config/HandlebarsFactory.java) to evaluate a config key. It'll look like this
+We could call getAll again without the wrapper to get the targetted values, but instead we'll create a handlebars helper (see [HandlebarsFactory](https://github.com/prefab-cloud/example-micronaut-app/blob/show-values-table/src/main/java/com/example/config/HandlebarsFactory.java)) to evaluate a config key. It'll look like this
 
 ```java
  handlebars.registerHelper("prefabEvaluateAndCoerceToString",
