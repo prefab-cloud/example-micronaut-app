@@ -32,6 +32,7 @@ public class PrefabContextFilter implements HttpFilter {
                     User user = (User) authentication.getAttributes().get(ExampleAuthenticationProvider.USER_ATTR);
                     configClient.getContextStore()
                             .addContext(PrefabContext.newBuilder("user")
+                                .put("id", user.id())
                                 .put("country", user.country())
                                 .put("email", user.email())
                                 .build()
