@@ -6,7 +6,9 @@ This repo shows how to add [Prefab] to your micronaut app to get access to featu
 - Feature flags
 - Live config
 
-Follow along on YouTube (coming soon)
+Follow along on YouTube
+
+[![YouTube](https://img.youtube.com/vi/pesH3CoiKTs/0.jpg)](https://www.youtube.com/watch?v=pesH3CoiKTs)
 
 ## Micronaut Launch
 
